@@ -9,7 +9,8 @@ const ItemCupomSchema = new Schema({
   quantidade: { type: Number, required: true },
   unidade: { type: String, default: "UN" }, // UN ou KG
   valorUnitario: { type: Number, required: true }, // Este campo dita quem é mais barato
-  valorTotal: { type: Number, required: true }
+  valorTotal: { type: Number, required: true },
+  categoria: { type: String }, // Categoria do produto (opcional, mas pode ajudar na comparação)  
 }, { timestamps: true });
 
 export const ItemCupom = models.ItemCupom || model("ItemCupom", ItemCupomSchema);

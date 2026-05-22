@@ -26,12 +26,12 @@ export default function HistoricoPage() {
 
     // 1. Filtragem dos cupons por mês
     const cuponsFiltrados = useMemo(() => {
-        return cupons.filter(c => c.updatedAt.startsWith(filtroMes));
+        return (cupons || []).filter(c => c.updatedAt.startsWith(filtroMes));
     }, [cupons, filtroMes]);
 
     // 2. Somatório dos cupons filtrados
     const totalNoMes = useMemo(() => {
-        return cuponsFiltrados.reduce((acc, curr) => acc + curr.valorTotal, 0);
+        return (cuponsFiltrados || []).reduce((acc, curr) => acc + curr.valorTotal, 0);
     }, [cuponsFiltrados]);
 
     const excluirCupom = async (id: string) => {

@@ -11,26 +11,35 @@ export async function GET(req: Request) {
 
     if (!termo) return NextResponse.json({ success: false, data: [] });
 
-    // Quebra a busca em palavras (ex: "OVO 30" vira ["OVO", "30"])
-    const normalizar = (text: string) => 
-      text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // Função que transforma "PAO" em "P[AÁÀÃÂ]O"
+    const buscarComAcentos = (text: string) => {
+      const accents: Record<string, string> = {
+        'a': '[aáàãâä]',
+        'e': '[eéèêë]',
+        'i': '[iíìîï]',
+        'o': '[oóòõôö]',
+        'u': '[uúùûü]',
+        'c': '[cç]'
+      };
+      return text.toLowerCase().split('').map(char => accents[char] || char).join('');
+    };
 
-    const palavras = normalizar(termo).trim().split(/\s+/);
+    // Normalizamos apenas para tirar acentos da BUSCA do usuário e reconstruir a Regex
+    const termoLimpo = termo.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const palavras = termoLimpo.trim().split(/\s+/);
 
-    // Cria um array de condições: cada palavra deve estar na descrição
-    // O $all garante que todas as palavras existam na string, em qualquer ordem
     const query = {
       $and: palavras.map(p => ({
-        descricao: { $regex: p, $options: "i" }
+        // Aqui a mágica acontece: "pao" vira o regex "p[aáàãâä]o"
+        descricao: { $regex: buscarComAcentos(p), $options: "i" }
       }))
     };
 
     const itens = await ItemCupom.find(query)
       .populate("estabelecimentoId")
       .sort({ valorUnitario: 1 }) 
-      .limit(10); // Buscamos um pouco mais para filtrar os melhores únicos
+      .limit(100); 
 
-    // Lógica para pegar apenas o preço mais recente/melhor de cada mercado para não repetir o mesmo item 5x
     const uniqueMercados = new Map();
     itens.forEach(item => {
         const mercId = item.estabelecimentoId?._id.toString();
