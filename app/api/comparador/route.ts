@@ -12,7 +12,10 @@ export async function GET(req: Request) {
     if (!termo) return NextResponse.json({ success: false, data: [] });
 
     // Quebra a busca em palavras (ex: "OVO 30" vira ["OVO", "30"])
-    const palavras = termo.trim().split(/\s+/);
+    const normalizar = (text: string) => 
+      text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const palavras = normalizar(termo).trim().split(/\s+/);
 
     // Cria um array de condições: cada palavra deve estar na descrição
     // O $all garante que todas as palavras existam na string, em qualquer ordem
