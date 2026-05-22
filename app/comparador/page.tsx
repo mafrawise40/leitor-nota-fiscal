@@ -33,9 +33,13 @@ export default function ComparadorPage() {
             if (data.success) {
                 setMeusFiltros(data.data);
 
-                // PEGA CATEGORIAS, LIMPA VAZIOS E ORDENA
-                const cats = Array.from(new Set(data.data.map((f: any) => f.categoria)))
-                    .filter(c => c && c.trim() !== "") // Remove o que for branco ou nulo
+                // 1. Extraímos os nomes como strings puras primeiro
+                const categoriasBrutas: string[] = data.data.map((f: any) => String(f.categoria || "GERAL"));
+
+                // 2. Criamos o Set e filtramos com tipagem garantida
+                const cats = Array.from(new Set(categoriasBrutas))
+                    .map((c: string) => c.trim())
+                    .filter((c: string) => c !== "")
                     .sort();
 
                 setCategoriasExistentes(cats as string[]);
@@ -106,7 +110,7 @@ export default function ComparadorPage() {
             console.error("Erro ao chamar API de delete:", error);
         }
     };
-    
+
     const removerFiltro = async (id: string, termo: string) => {
         await fetch('/api/filtros', {
             method: 'DELETE',
