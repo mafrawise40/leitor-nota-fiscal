@@ -7,7 +7,8 @@ import {
   History, 
   LayoutDashboard, 
   ReceiptText, 
-  ArrowDownUp // Ícone para o Comparador
+  ArrowDownUp,
+  Store // Ícone para Estabelecimentos
 } from "lucide-react";
 
 export default function Navbar() {
@@ -16,6 +17,7 @@ export default function Navbar() {
   const menuItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Comparador", href: "/comparador", icon: ArrowDownUp },
+    { name: "Mercados", href: "/estabelecimentos", icon: Store }, // Nova Rota
     { name: "Escanear", href: "/upload", icon: Camera },
     { name: "Histórico", href: "/historico", icon: History },
   ];
@@ -34,7 +36,8 @@ export default function Navbar() {
             </span>
           </div>
 
-          <div className="flex items-center gap-6">
+          {/* Ajustei o gap para acomodar o novo item sem quebrar o layout */}
+          <div className="flex items-center gap-5">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -42,7 +45,7 @@ export default function Navbar() {
                 <Link 
                   key={item.href} 
                   href={item.href}
-                  className={`flex items-center gap-2 font-black text-[11px] uppercase tracking-wider transition-all ${
+                  className={`flex items-center gap-2 font-black text-[10px] uppercase tracking-wider transition-all ${
                     isActive ? "text-green-600" : "text-gray-400 hover:text-gray-900"
                   }`}
                 >
@@ -56,7 +59,7 @@ export default function Navbar() {
       </nav>
 
       {/* MENU MOBILE (Barra Inferior Fixa) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-2 z-50 flex justify-between items-center pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-2 py-2 z-50 flex justify-between items-center pb-safe shadow-[0_-4px_20px_rgba(0,0,0,0.03)]">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -69,9 +72,9 @@ export default function Navbar() {
               }`}
             >
               <div className={`p-2 rounded-2xl transition-colors ${isActive ? "bg-green-50" : ""}`}>
-                <Icon size={22} strokeWidth={isActive ? 3 : 2} />
+                <Icon size={20} strokeWidth={isActive ? 3 : 2} />
               </div>
-              <span className={`text-[9px] font-black uppercase tracking-[0.05em] ${isActive ? "text-green-600" : "text-gray-400"}`}>
+              <span className={`text-[8px] font-black uppercase tracking-tight ${isActive ? "text-green-600" : "text-gray-400"}`}>
                 {item.name}
               </span>
             </Link>

@@ -65,11 +65,11 @@ export default function ComparadorPage() {
         const novoRanking: { [key: string]: number } = {};
         Object.values(resultados).forEach(itens => {
             if (itens?.[0]) {
-                const n1 = itens[0].estabelecimentoId?.nome;
+                const n1 = itens[0].estabelecimentoId?.nomeCurto || itens[0].estabelecimentoId?.nome;
                 novoRanking[n1] = (novoRanking[n1] || 0) + 2;
             }
             if (itens?.[1]) {
-                const n2 = itens[1].estabelecimentoId?.nome;
+                const n2 = itens[1].estabelecimentoId?.nomeCurto || itens[1].estabelecimentoId?.nome;
                 novoRanking[n2] = (novoRanking[n2] || 0) + 1;
             }
         });
@@ -146,7 +146,7 @@ export default function ComparadorPage() {
                                             </div>
                                             <div className="flex flex-col min-w-0">
                                                 <span className="text-[10px] font-black text-gray-900 uppercase truncate">
-                                                    {item.estabelecimentoId?.nome}
+                                                    {item.estabelecimentoId?.nomeCurto || item.estabelecimentoId?.nome}
                                                 </span>
                                                 <span className="text-[9px] font-bold text-gray-400 uppercase truncate">
                                                     {item.descricao}

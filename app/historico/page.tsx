@@ -116,7 +116,7 @@ export default function HistoricoPage() {
 
                                 {/* Nome do Estabelecimento Populado */}
                                 <h3 className="font-black text-gray-800 uppercase text-lg leading-tight break-words min-h-[3rem] flex items-center">
-                                    {c.estabelecimentoId?.nome || "Mercado Desconhecido"}
+                                    {c.estabelecimentoId?.nomeCurto || c.estabelecimentoId?.nome || "Mercado Desconhecido"}
                                 </h3>
 
                                 <div className="flex items-start gap-1 mt-1 mb-4 text-gray-500">
@@ -159,7 +159,7 @@ export default function HistoricoPage() {
                         <div className="p-8 bg-gray-900 text-white flex justify-between items-center">
                             <div>
                                 <p className="text-[10px] text-green-400 font-black uppercase tracking-widest">Itens da Nota</p>
-                                <h2 className="text-xl font-black uppercase">{selectedCupom.estabelecimentoId?.nome}</h2>
+                                <h2 className="text-xl font-black uppercase">{selectedCupom.estabelecimentoId?.nomeCurto || selectedCupom.estabelecimentoId?.nome}</h2>
                             </div>
                             <button onClick={() => setSelectedCupom(null)} className="p-2 hover:bg-white/10 rounded-xl">
                                 <X size={28} />
