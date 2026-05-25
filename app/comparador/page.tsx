@@ -260,18 +260,46 @@ export default function ComparadorPage() {
                                     </div>
 
                                     <div className="flex-1">
-                                        {resultados[f.termo]?.map((item, index) => (
-                                            <div key={item._id} className={`flex items-center justify-between p-4 border-b last:border-0 ${index === 0 ? 'bg-green-50/30' : ''}`}>
-                                                <div className="flex flex-col min-w-0">
-                                                    <span className="text-[10px] font-black uppercase truncate">{item.estabelecimentoId?.nomeCurto || item.estabelecimentoId?.nome}</span>
-                                                    <span className="text-[9px] text-gray-400 uppercase truncate">{item.descricao}</span>
+                                        {resultados[f.termo]?.map((item: any, index: number) => {
+                                            const ehPrimeiro = index === 0;
+                                            return (
+                                                <div
+                                                    key={item._id}
+                                                    className={`p-3 border-b last:border-0 transition-all ${ehPrimeiro ? 'bg-green-50/50' : 'hover:bg-gray-50'
+                                                        }`}
+                                                >
+                                                    <div className="flex justify-between items-start">
+                                                        <div className="flex-1">
+                                                            <p className={`text-[10px] font-black uppercase ${ehPrimeiro ? 'text-green-700' : 'text-blue-600'
+                                                                }`}>
+                                                                {item.estabelecimentoId?.nome || "Mercado Desconhecido"}
+                                                                {ehPrimeiro && " 🏆 MELHOR PREÇO"}
+                                                            </p>
+                                                            <p className={`text-[11px] leading-tight font-medium ${ehPrimeiro ? 'text-gray-900' : 'text-gray-500'
+                                                                }`}>
+                                                                {item.descricao}
+                                                            </p>
+                                                        </div>
+
+                                                        {/* DESTAQUE DO PREÇO */}
+                                                        <div className="text-right">
+                                                            <p className={`text-sm font-black ${ehPrimeiro ? 'text-green-600' : 'text-gray-900'
+                                                                }`}>
+                                                                R$ {item.valorUnitario.toFixed(2)}
+                                                            </p>
+
+                                                            {/* DESTAQUE DA DATA */}
+                                                            <p className={`text-[9px] font-bold px-1 rounded inline-block ${ehPrimeiro
+                                                                    ? 'bg-green-200 text-green-800'
+                                                                    : 'bg-gray-100 text-gray-500'
+                                                                }`}>
+                                                                {new Date(item.createdAt).toLocaleDateString('pt-BR')}
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="flex flex-col items-end">
-                                                    <span className={`text-sm font-black ${index === 0 ? 'text-green-600' : ''}`}>R$ {item.valorUnitario.toFixed(2)}</span>
-                                                    <span className="text-[8px] text-gray-400 flex items-center gap-1"><Calendar size={8} /> {new Date(item.createdAt || Date.now()).toLocaleDateString('pt-BR')}</span>
-                                                </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </section>
                             ))}

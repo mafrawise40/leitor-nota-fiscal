@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { ShoppingBag, Calendar, Store, Receipt, Info, X, Loader2, Search, Trash2, Filter } from 'lucide-react';
+import { Calendar, Store, Receipt, X, Loader2, Search, Trash2, Filter, TrendingUp } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HistoricoPage() {
     const [cupons, setCupons] = useState<any[]>([]);
@@ -9,6 +10,7 @@ export default function HistoricoPage() {
     const [selectedCupom, setSelectedCupom] = useState<any>(null);
     const [itens, setItens] = useState<any[]>([]);
     const [loadingItens, setLoadingItens] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     // Estado para o filtro de mês (Formato: "YYYY-MM")
     const [filtroMes, setFiltroMes] = useState(new Date().toISOString().substring(0, 7));
@@ -22,6 +24,8 @@ export default function HistoricoPage() {
                 setCupons(data.data);
                 setLoading(false);
             });
+
+            setMounted(true);
     }, []);
 
     // 1. Filtragem dos cupons por mês
@@ -65,11 +69,26 @@ export default function HistoricoPage() {
         <main className="min-h-screen bg-gray-50 pb-20">
             <header className="bg-white border-b sticky top-0 z-20">
                 <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2">
-                        <Receipt className="text-green-600" /> MEU HISTÓRICO
-                    </h1>
+                    {/* CONTAINER FLEX PARA ALINHAR TÍTULO E BOTÃO */}
+                    <div className="flex items-center gap-4">
+                        <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2">
+                            <Receipt className="text-green-600" /> MEU HISTÓRICO
+                        </h1>
 
-                    {/* Filtro de Mês */}
+                        {/* AGORA O LINK ESTÁ FORA DO H1 */}
+                        {mounted && (
+                            <Link 
+                                href="/historico/itens"
+                                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-2xl font-bold transition-all text-xs shadow-lg shadow-red-200 cursor-pointer"
+                                style={{ textDecoration: 'none', display: 'inline-flex' }}
+                            >
+                                <TrendingUp size={16} color="white" />
+                                <span className="text-white">TODOS OS ITENS</span>
+                            </Link>
+                        )}
+                    </div>
+
+                    {/* FILTRO DE MÊS PERMANECE IGUAL */}
                     <div className="flex items-center gap-3 bg-gray-100 p-2 rounded-2xl">
                         <Filter size={18} className="text-gray-500 ml-2" />
                         <input
@@ -121,7 +140,7 @@ export default function HistoricoPage() {
 
                                 <div className="flex items-start gap-1 mt-1 mb-4 text-gray-500">
                                     <div className="mt-0.5 shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg"  width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.74a1.278 1.278 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.74a1.278 1.278 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /><circle cx="12" cy="10" r="3" /></svg>
                                     </div>
                                     <p className="text-[10px] font-bold uppercase leading-relaxed tracking-wide">
                                         {c.estabelecimentoId?.endereco || "Endereço não informado"}
